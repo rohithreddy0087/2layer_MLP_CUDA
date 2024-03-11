@@ -4,6 +4,19 @@
 
 This project implements a multi-layer perceptron (MLP) for classifying MNIST handwritten digit images using CUDA (Compute Unified Device Architecture). The MLP consists of two fully connected layers with a ReLU activation function in between. It utilizes parallelism provided by CUDA to accelerate computation on GPU.
 
+
+## MLP Architecture
+
+The MLP architecture consists of two fully connected layers followed by a softmax layer and cross-entropy loss function:
+
+- Before feeding the images into the MLP, they are flattened into a 1D array. Each 28x28 pixel image is flattened into a 784-dimensional vector.
+- Input Layer: 784 neurons (flattened image data)
+- First Hidden Layer: 64 neurons with ReLU activation
+- Second Hidden Layer: 10 neurons (output layer) with softmax activation
+- Loss Function: Cross-entropy loss
+
+Weights are updated using simple gradient descent.
+
 ## Code Structure
 
 The code is organized into several classes:
