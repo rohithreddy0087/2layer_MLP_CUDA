@@ -2,8 +2,24 @@
 
 ## Overview
 
-This project implements a multi-layer perceptron (MLP) for classifying MNIST handwritten digit images using CUDA (Compute Unified Device Architecture). The MLP consists of two fully connected layers with a ReLU activation function in between. It utilizes parallelism provided by CUDA to accelerate computation on GPU.
+This project is an implementation of a 2-layer Multilayer Perceptron (MLP) for classifying MNIST handwritten digit images, written from scratch in CUDA and C++. Designed with modularity and scalability in mind, it showcases the efficient utilization of CUDA kernels for deep learning tasks. This MLP model is capable of handling datasets like MNIST for digit recognition and can be easily scaled or modified for various deep learning applications.
 
+## Features
+
+- **Modular Design:** Each component of the MLP (fully connected layers, ReLU activation, and cross-entropy loss) is implemented in separate modules, making the codebase clean, easy to navigate, and extend.
+- **CUDA-accelerated Computation:** Utilizes CUDA kernels for efficient parallel computation of operations such as matrix multiplication, addition, and activation functions, significantly speeding up the training and inference processes.
+- **Fully Connected Layers:** Implemented with forward and backward propagation capabilities, supporting gradient descent optimization.
+- **Activation Functions:** Includes a ReLU (Rectified Linear Unit) activation layer for introducing non-linearity.
+- **Loss Calculation:** Incorporates Cross-Entropy Loss for evaluating model performance and guiding the training process.
+- **Data Handling:** Features a data loader for MNIST dataset, facilitating easy data preprocessing and batch management.
+
+
+## Implementation Details
+
+- **Kernels and Parallelization:** The core of the performance lies in CUDA kernels such as `matrixMulKernel`, `reluForwardKernel`, and `crossEntropyLossKernel`, which execute matrix operations, activation functions, and loss computations in parallel on the GPU.
+- **Modular Architecture:** Components like `FullyConnectedLayer`, `ReLU`, and `CrossEntropyLoss` encapsulate specific functionalities, adhering to the principle of single responsibility. This approach not only makes the code more readable but also facilitates easy updates and scalability.
+- **Efficient Memory Management:** The code demonstrates effective management of GPU memory, including allocation, transfer between host and device, and deallocation, ensuring optimal resource utilization.
+- **Data Loading and Preprocessing:** The `Dataloader` class efficiently handles the loading and preprocessing of the MNIST dataset, converting image data into a format suitable for neural network processing.
 
 ## MLP Architecture
 
@@ -17,75 +33,20 @@ The MLP architecture consists of two fully connected layers followed by a softma
 
 Weights are updated using simple gradient descent.
 
-## Code Structure
-
-The code is organized into several classes:
-
-### DataLoader
-
-- `void loadMNISTData(const std::string& imagesFile, const std::string& labelsFile, float* images, unsigned char* labels)`: Loads MNIST data from files into arrays.
-
-### ReLU
-
-- `void forward(float* input, float* output, int size)`: Applies ReLU activation function forward pass.
-- `void backward(float* input, float* output, float* delta, int size)`: Computes gradients using backward pass.
-
-### FullyConnectedLayer
-
-- `FullyConnectedLayer(int input_size, int output_size)`: Constructor to initialize fully connected layer.
-- `void initializeWeights()`: Initializes weights and biases.
-- `void forward(float* input, float* output, int batch_size)`: Performs forward pass through the layer.
-- `void backward(float* input, float* delta_z, float* input_gradients, float* weights_gradients, float* biases_gradients, int batch_size, float learning_rate)`: Performs backward pass and computes gradients.
-
-### CrossEntropyLoss
-
-- `void computeLoss(float* logits, unsigned char* labels, float* activations, float* loss, int batch_size, int num_classes)`: Computes cross entropy loss.
-- `void computeGradient(float* activations, unsigned char* labels, float* delta, int batch_size, int num_classes)`: Computes gradients of loss function.
-
-### Main Functionality
-
-- `trainMLP(int num_epochs, int num_examples, int input_size, int hidden_size, int output_size, float learning_rate)`: Trains the MLP for a specified number of epochs.
-
 ## Parallelization
 
 - Matrix multiplication and vector addition kernels (`matrixMul` and `matrixVecAdd`) are parallelized to utilize GPU cores for faster computation.
 - ReLU activation function and its backward pass (`reluForwardKernel` and `reluBackwardKernel`) are parallelized to process large arrays efficiently.
 - Cross-entropy loss computation (`crossEntropyLossKernel`) and gradient computation (`computeGradientKernel`) are parallelized to process multiple samples simultaneously.
 
-## Kernels
 
-### matrixMul
+## Prerequisites
 
-This kernel performs matrix multiplication of input and weights matrices.
+Before you begin, ensure you have met the following requirements:
 
-### matrixVecAdd
-
-This kernel adds a vector to each row of a matrix.
-
-### reluForwardKernel
-
-This kernel applies ReLU activation function element-wise to an input array.
-
-### reluBackwardKernel
-
-This kernel computes gradients using ReLU backward pass.
-
-### crossEntropyLossKernel
-
-This kernel computes cross-entropy loss for each sample in a batch.
-
-### computeGradientKernel
-
-This kernel computes gradients of the loss function.
-
-## Usage
-
-To train the MLP model, call the `trainMLP` function with desired parameters.
-
-## Dependencies
-
-- CUDA Toolkit
-- C++ compiler (supporting C++11)
+- NVIDIA CUDA Toolkit (10.x or newer recommended)
+- C++ Compiler with C++11 support
+- An NVIDIA GPU capable of CUDA computation
 
 ## References
 
